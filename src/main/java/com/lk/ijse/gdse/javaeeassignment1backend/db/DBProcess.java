@@ -7,7 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
-public class DbProcessItem {
+public class DBProcess {
 
     private static final String SAVE_ITEM_DATA = "INSERT INTO item (CODE,DESCRIPTION,QTY,UNITPRICE) VALUES (?,?,?,?)";
 

@@ -1,6 +1,6 @@
 package com.lk.ijse.gdse.javaeeassignment1backend.api;
 
-import com.lk.ijse.gdse.javaeeassignment1backend.db.DbProcessItem;
+import com.lk.ijse.gdse.javaeeassignment1backend.db.DBProcess;
 import com.lk.ijse.gdse.javaeeassignment1backend.dto.ItemDTO;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
@@ -12,20 +12,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 
-
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-@WebServlet(name = "item", value = "/item",
-        initParams = {
-                @WebInitParam(name = "db-user", value = "root"),
-                @WebInitParam(name = "db-pw", value = "1234"),
-                @WebInitParam(name = "db-url", value = "jdbc:mysql://localhost:3306/pos_system?createDatabaseIfNotExist=true"),
-                @WebInitParam(name = "db-class", value = "com.mysql.cj.jdbc.Driver")
-        },
-        loadOnStartup = 5)
+@WebServlet(name = "item", value = "/item")
 
 public class item extends HttpServlet {
 
@@ -33,23 +28,14 @@ public class item extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        String userName = getServletConfig().getInitParameter("db-user");
-        String password = getServletConfig().getInitParameter("db-pw");
-        String url = getServletConfig().getInitParameter("db-url");
-
-
 
         try {
-            Class.forName(getServletConfig().getInitParameter("db-class"));
-            this.connection = DriverManager.getConnection(url,userName,password);
-
-            /*InitialContext ctx = new InitialContext();
+            InitialContext ctx = new InitialContext();
             DataSource pool = (DataSource) ctx.lookup("java:comp/env/jdbc/pos");
-            System.out.println("POOOOL" + pool);
-            System.out.println("conection  : "+pool.getConnection());
-            this.connection = pool.getConnection();*/
+            this.connection = pool.getConnection();
 
-        } catch (SQLException | ClassNotFoundException e) {
+
+        } catch (NamingException | SQLException e) {
             e.printStackTrace();
         }
     }
@@ -62,8 +48,8 @@ public class item extends HttpServlet {
         } else {
             Jsonb jsonb = JsonbBuilder.create();
             ItemDTO itemDTO = jsonb.fromJson(req.getReader(), ItemDTO.class);
-            DbProcessItem dbProcessItem = new DbProcessItem();
-            dbProcessItem.saveItemData(itemDTO, connection);
+            DBProcess dbProcess = new DBProcess();
+            dbProcess.saveItemData(itemDTO, connection);
 
         }
     }
