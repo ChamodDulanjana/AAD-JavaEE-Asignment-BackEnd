@@ -5,15 +5,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.io.Serializable;
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @ToString
-public class ItemDTO implements Serializable {
+public class OrderDetailsDTO {
+    private String orderID;
     private String itemCode;
-    private String description;
-    private double unitPrice;
-    private int qtyOnHand;
+    private Double unitPrice;
+    private int qty;
+    private Double total;
 }
